@@ -96,3 +96,24 @@ VM – Zugriff auf alles, womit du dich in deren Chrome einloggst. Deshalb: isol
 Netz lassen, nur Konten verwenden, die Claude nutzen soll, und das Passwort ändern
 (es steht im Klartext in den Proxmox-Notizen – nach dem Ändern dort löschen).
 Für Arbeit mit echten Logins die VM nehmen, nicht den Container.
+
+### Passwort ändern
+
+Am einfachsten auf dem Proxmox-Host (ohne das alte Passwort zu kennen):
+
+```bash
+# VM (über den Gast-Agenten, fragt das neue Passwort ab)
+qm guest passwd <ID> claude
+# Container
+pct exec <ID> -- passwd claude
+```
+
+Alternativ in der Maschine selbst als User `claude`: `passwd`.
+
+Danach das alte Passwort aus den Notizen entfernen – in der Proxmox-UI unter
+Übersicht → Notizen → Bearbeiten, oder auf dem Host:
+
+```bash
+qm set <ID> --delete description   # VM
+pct set <ID> --delete description  # Container
+```
