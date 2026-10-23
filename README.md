@@ -26,8 +26,9 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/waldonso2/Proxmox-Claude
 TYPE=lxc bash -c "$(curl -fsSL https://raw.githubusercontent.com/waldonso2/Proxmox-Claude-Desktop-Script-/main/claude-box.sh)"
 ```
 
-Am Ende stehen ID, IP, Passwort und die einmaligen Login-Schritte im Terminal,
-und es gibt einen Snapshot `clean-install`.
+Am Ende stehen ID, IP, User, Passwort und die einmaligen Login-Schritte im Terminal
+und in den **Notizen** der VM bzw. des Containers (Proxmox-UI → Übersicht).
+Außerdem gibt es einen Snapshot `clean-install`.
 
 ### Einmalig: einloggen
 
@@ -92,5 +93,6 @@ Proxmox VE 8 (VM: `import-from` ab 7.2), Internetzugang vom Host, ein Claude-Pro
 
 Wer deine Claude-Sitzung kontrolliert, hat sudo in dieser Maschine und – bei der
 VM – Zugriff auf alles, womit du dich in deren Chrome einloggst. Deshalb: isoliertes
-Netz lassen, nur Konten verwenden, die Claude nutzen soll, und das Passwort ändern.
+Netz lassen, nur Konten verwenden, die Claude nutzen soll, und das Passwort ändern
+(es steht im Klartext in den Proxmox-Notizen – nach dem Ändern dort löschen).
 Für Arbeit mit echten Logins die VM nehmen, nicht den Container.

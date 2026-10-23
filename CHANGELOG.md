@@ -16,6 +16,7 @@ TYPE=lxc bash -c "$(curl -fsSL https://raw.githubusercontent.com/waldonso2/Proxm
 - VM: User, Passwort und SSH-Keys über Proxmox' eigene Cloud-Init-Felder
 - Standardgröße 2 vCPU, 4 GB RAM, 32 GB Disk
 - Isoliertes Netz `vmbr9` gilt für beide Varianten
+- User, Passwort, IP und erste Schritte stehen nach der Installation im Terminal und in den Notizen der VM/des Containers (Proxmox-UI → Übersicht)
 
 Pre-Release: noch nicht auf echter Proxmox-Hardware getestet.
 

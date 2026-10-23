@@ -215,6 +215,16 @@ SETUP
   4. Auf dem Host: pct snapshot $VMID logged-in"
 fi
 
+# Zugangsdaten in die Notizen (Proxmox-UI → Übersicht) – stehen damit auch im Klartext in /etc/pve
+PVE_CMD=qm; [[ $TYPE == lxc ]] && PVE_CMD=pct
+$PVE_CMD set "$VMID" --description "## claude-box ($TYPE)
+
+- **User:** \`claude\`
+- **Passwort:** \`$PASSWORD\`
+- **IP:** \`${IP:-unbekannt}\`
+
+**Einmalig** – $FIRST_STEPS" >/dev/null
+
 cat <<EOF
 
 ======================================================
