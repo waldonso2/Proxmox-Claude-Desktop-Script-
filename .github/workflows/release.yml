@@ -1,0 +1,42 @@
+name: Release
+
+# Veröffentlicht ein GitHub-Release, sobald die Version in VERSION noch keinen Tag hat.
+# Merge auf main ohne Versionssprung ändert also nichts. 0.x-Versionen sind Pre-Releases.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+
+  publish:
+    needs: lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Version
+        id: v
+        run: |
+          VERSION=$(tr -d '[:space:]' < VERSION)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if git rev-parse "v$VERSION" >/dev/null 2>&1; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
+      - name: Create release
+        if: steps.v.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.v.outputs.version }}
+        run: |
+          awk -v v="## $VERSION" '$0 ~ "^## " { p = ($0 == v); next } p' CHANGELOG.md > notes.md
+          test -s notes.md || { echo "Kein Abschnitt '## $VERSION' in CHANGELOG.md"; exit 1; }
+          PRE=""; [[ "$VERSION" == 0.* ]] && PRE="--prerelease"
+          gh release create "v$VERSION" --title "v$VERSION" --notes-file notes.md --target "$GITHUB_SHA" $PRE claude-box.sh
